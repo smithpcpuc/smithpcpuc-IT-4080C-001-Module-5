@@ -57,19 +57,19 @@ public class GameManager : NetworkBehaviour {
         GUILayout.Label("Mode: " + mode);
     }
 
-    [ServerRpc(RequireOwnership = false)]
-    public void RequestNewPlayerColorServerRpc(ServerRpcParams serverRpcParams = default) {
+    [ServerRpc(RequiresOwnership = false)]
+    public void RequestNewPlayerColorServerRpc(SeverRpcParams serverRpcParams = default) {
         if (!IsServer) return;
 
-        Color NewColor = PlayerColors[colorIndex];
+        Color NewColor = PlayerColor[colorIndex];
         colorIndex += 1;
-        if (colorIndex > PlayerColors.Length - 1){
+        if (colorIndex > playerColors.Length - 1){
             colorIndex = 0;
         }
 
         //PlayerColor.Value = newColor;
         var po = NetworkManager.Singleton.ConnectedClients[serverRpcParams.Receive.SenderClientId].PlayerObject;
-        Player player = po.GetComponent<Player>();
+        PlayerColors player = po.GetComponent<player>();
         player.PlayerColor.Value = NewColor;
     }
 }
