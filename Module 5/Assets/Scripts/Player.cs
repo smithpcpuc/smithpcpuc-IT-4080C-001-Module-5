@@ -13,11 +13,12 @@ public class Player : NetworkBehaviour {
     private Camera _camera;
     public float movementSpeed = .5f;
     private float rotationSpeed = 1f;
+    private BulletSpawner _bulletSpawner;
 
     private void Start() {
         ApplyPlayerColor();
         PlayerColor.OnValueChanged += OnPlayerColorChanged;
-        
+        _bulletSpawner = transform.Find("RArm").transform.Find("BulletSpawner").GetComponent<BulletSpawner>();
     }
 
 
@@ -77,6 +78,9 @@ public class Player : NetworkBehaviour {
         if (IsOwner) {
             Vector3[] results = CalcMovement();
             RequestPositionForMovementServerRpc(results[0], results[1]);
+            if(Input.GetButtonDown("Fire1")) {
+                _bulletSpawner.FireServerRpc();
+            }
         }   
         
         if(!IsOwner || IsHost) {
